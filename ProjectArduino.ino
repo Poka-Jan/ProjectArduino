@@ -7,10 +7,10 @@
 
 #define RELAY_PIN 5     
 #define FAN_PIN RELAY_PIN 
-#define MIST_PIN 7     
+#define MIST_RELAY_PIN 6  
 
 #define LCD_ADDR 0x27   
-#define LCD_COLS 16    
+#define LCD_COLS 16     
 #define LCD_ROWS 2      
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -28,8 +28,7 @@ void DisplayStatus(const String& status) {
 
 void setup() {
   pinMode(RELAY_PIN, OUTPUT);
-  pinMode(FAN_PIN, OUTPUT);
-  pinMode(MIST_PIN, OUTPUT);
+  pinMode(MIST_RELAY_PIN, OUTPUT); 
 
   dht.begin();
   lcd.init();
@@ -44,19 +43,16 @@ void loop() {
   lcd.print("Humidity: ");
   lcd.print(humidity, 1);
   lcd.print("%");
-  
+
   if (humidity < 60) { 
-    digitalWrite(RELAY_PIN, HIGH);
-    digitalWrite(MIST_PIN, HIGH); 
-    digitalWrite(FAN_PIN, HIGH);
+    digitalWrite(RELAY_PIN, HIGH); 
+    digitalWrite(MIST_RELAY_PIN, HIGH); 
     DisplayStatus("Humidifying...");
-  }
-  else {
-    digitalWrite(RELAY_PIN, LOW); 
-    digitalWrite(MIST_PIN, LOW);
-    digitalWrite(FAN_PIN, LOW);
+  } else {
+    digitalWrite(RELAY_PIN, LOW);  
+    digitalWrite(MIST_RELAY_PIN, LOW); 
     DisplayStatus("Humidity OK");
   }
-  
+
   delay(5000); 
 }
