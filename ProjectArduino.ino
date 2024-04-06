@@ -24,10 +24,7 @@ bool isMistOn = false;
 void DisplayStatus(const String& status) {
   lcd.setCursor(0, 1);
   lcd.print(status);
-
-  for (int i = status.length(); i < LCD_COLS; i++) {
-    lcd.print(" ");
-  }
+  lcd.print("                ");
 }
 
 void setup() {
@@ -50,19 +47,29 @@ void loop() {
   lcd.print("%");
 
   
-  if (humidity < 60) {
-    if (!isMistOn) { 
-      digitalWrite(RELAY_PIN, HIGH); 
+  if (humidity < 90) {
+    if (!isMistOn) {
+      digitalWrite(RELAY_PIN, HIGH);
+
+      //trun on the atomizer
       digitalWrite(MIST_RELAY_PIN, HIGH); 
-      DisplayStatus("Humidifying...");
-      isMistOn = true; 
+      delay(1000);
+      digitalWrite(MIST_RELAY_PIN, LOW);
+      isMistOn = true;
+
+      DisplayStatus("Humidifying..."); 
     }
   } else {
     if (isMistOn) { 
       digitalWrite(RELAY_PIN, LOW);  
-      digitalWrite(MIST_RELAY_PIN, LOW); 
+      
+      //trun on the atomizer
+      digitalWrite(MIST_RELAY_PIN, HIGH); 
+      delay(1000);
+      digitalWrite(MIST_RELAY_PIN, LOW);
+      isMistOn = false;
+
       DisplayStatus("Humidity OK");
-      isMistOn = false; 
     }
   }
 
